@@ -1,0 +1,6 @@
+host: http://0.0.0.0:8080
+path: ./conf_dir
+directory: ./dir_exposed
+icons:
+  png: /static/icons/image.png
+  deb: /static/icons/deb.png
