@@ -124,7 +124,7 @@ async fn serve(
         .extension()
         .map(|ext| ext.to_string_lossy().to_string());
 
-      let icon = if let Some(extension) = extension {
+      let mut icon = if let Some(extension) = extension {
         config
           .icons
           .clone()
@@ -134,6 +134,15 @@ async fn serve(
       } else {
         None
       };
+
+      if icon.is_none() {
+        icon = config
+          .icons
+          .clone()
+          .unwrap_or_default()
+          .get(&file.file_name().to_string_lossy().to_string())
+          .cloned()
+      }
 
       let file = FileContext {
         icon,
@@ -150,6 +159,7 @@ async fn serve(
       };
       dir_template_ctx.files.push(file);
     }
+    dir_template_ctx.files.sort_by(|a, b| a.name.cmp(&b.name));
     let template = template_path.clone();
     let html = mustache::compile_str(&template_str).map_err(move |err| {
       err

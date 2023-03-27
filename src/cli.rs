@@ -4,6 +4,6 @@ use clap::Parser;
 #[derive(Clone, Debug, Parser)]
 #[command(author, version, about, long_about = None)]
 pub struct Cli {
-  #[clap(short, long, default_value = "/etc/nhfs/config.toml")]
+  #[clap(short, long, default_value = "/etc/nhfs/nhfs.conf")]
   pub(crate) conf: String,
 }
