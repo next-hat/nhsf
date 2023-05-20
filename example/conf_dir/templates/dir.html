@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
   <head>
-    <title>File Server | Next Hat</title>
+    <title>{{ title }}</title>
     <link rel="stylesheet" type="text/css" href="/static/style.css" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -13,7 +13,7 @@
         <div class="banner">
           <a href="/">
             <img src="/static/icons/logo.png" alt="logo" width="45", height="45" />
-            <b>Next Hat FS</b>
+            <b>{{ title }}</b>
           </a>
         </div>
       </div>
@@ -22,8 +22,8 @@
     <main>
       <section class="title">
         <div class="row">
-          <h1>Next Hat file server</h1>
-          <p>Next Hat file server are the official Next Hat file hosted by next hat</p>
+          <h1>{{ subtitle }}</h1>
+          <p>{{ description }}</p>
         </div>
       </section>
       <section class="files">
@@ -31,7 +31,7 @@
           <section class="file-table">
             <div class="file-table-row">
               <div class="file-icon">
-                  <img  src="/static/icons/blank.gif" alt="Icon " width="22" height="22">
+                <img src="/static/icons/blank.gif" alt="Icon " width="22" height="22">
               </div>
               <a class="file-table-elem file-table-title" href="?C=N;O=D">Name</a>
               <a class="file-table-elem file-table-title" href="?C=M;O=A">Last modified</a>
@@ -39,28 +39,27 @@
             </div>
             <hr class="separator">
             <hr>
-            {{#files}}
+            {% for file in files %}
             <div class="file-table-row file-table-row-hover">
-              <a class="file-table-link" href="{{path}}">
+              <a class="file-table-link" href="{{file.path}}">
                 <div class="file-icon">
-                  {{#icon}}
-                    <img src="{{icon}}" alt="[DIR]" width="22" height="22">
-                  {{/icon}}
-                  {{^icon}}
-                    {{#is_directory}}
-                      <img src="/static/icons/folder.png" alt="[DIR]" width="22" height="22">
-                    {{/is_directory}}
-                    {{#is_file}}
-                      <img src="/static/icons/file.png" alt="[DIR]" width="22" height="22">
-                    {{/is_file}}
-                  {{/icon}}
+                {% if file.icon %}
+                    <img src="{{file.icon}}" alt="[DIR]" width="22" height="22">
+                {% endif %}
+                {% if file.icon == null %}
+                    {% if file.is_directory %}
+                        <img src="/static/icons/folder.png" alt="[DIR]" width="22" height="22">
+                    {% else %}
+                        <img src="/static/icons/file.png" alt="[DIR]" width="22" height="22">
+                    {% endif %}
+                {% endif %}
                 </div>
-                <p class="file-table-elem">{{name}}</p>
-                <p class="file-table-elem">{{last_modified}}</p>
-                <p class="file-table-elem">{{size}}</p>
+                <p class="file-table-elem">{{ file.name }}</p>
+                <p class="file-table-elem">{{ file.last_modified }}</p>
+                <p class="file-table-elem">{{ file.size }}</p>
               </a>
             </div>
-            {{/files}}
+            {% endfor %}
             <hr>
           </section>
         </div>

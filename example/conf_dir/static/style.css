@@ -12,8 +12,6 @@ html {
     Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-
-
 body {
   margin: 0;
   box-sizing: inherit;
@@ -63,7 +61,6 @@ div.banner > a {
 
 hr.separator {
   border: 0;
-  background-color: #ff9800;
   margin: 0px;
   padding: 0px;
   height: 1px;
@@ -97,7 +94,7 @@ a {
   margin-top: 0;
   padding-top: 0.4005rem;
   margin-bottom: 1.1rem;
-  color: #ff9800;
+  color: hsl(215.4, 16.3%, 56.9%);
   text-decoration: none;
 }
 
@@ -139,7 +136,6 @@ div.row.no-padding {
 
 section.file-table {
   background-color: #1B1B1D;
-  border: 1px solid #ff9800;
   height: 100%;
   border-radius: 0.125rem;
   color: #111;

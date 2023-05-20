@@ -11,13 +11,13 @@ path = "src/main.rs"
 
 [dependencies]
 clap = { version = "4.1.13", features = ["derive"] }
-mustache = "0.9.0"
 ntex = { version = "0.6.5", features = ["tokio"] }
 serde = { version = "1.0.158", features = ["derive"] }
 serde_json = "1.0.94"
 serde_yaml = "0.9.19"
 ntex-files = "*"
 chrono = "0.4.24"
+liquid = { version = "0.26.1", default-features = false, features = ["stdlib"] }
 
 [patch.crates-io]
 ntex-files = { git = "https://github.com/ntex-rs/ntex-extras" }

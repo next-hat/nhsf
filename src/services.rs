@@ -160,25 +160,29 @@ async fn serve(
       dir_template_ctx.files.push(file);
     }
     dir_template_ctx.files.sort_by(|a, b| a.name.cmp(&b.name));
-    let template = template_path.clone();
-    let html = mustache::compile_str(&template_str).map_err(move |err| {
-      err
-        .map_err_context(|| {
-          format!("Failed to compile template file {}", template.display())
-        })
-        .set_status(StatusCode::INTERNAL_SERVER_ERROR)
+    let liquid_template = liquid::ParserBuilder::with_stdlib()
+      .build()
+      .map_err(|err| HttpError {
+        msg: err.to_string(),
+        status: StatusCode::INTERNAL_SERVER_ERROR,
+      })?
+      .parse(&template_str)
+      .map_err(|err| HttpError {
+        msg: err.to_string(),
+        status: StatusCode::INTERNAL_SERVER_ERROR,
+      })?;
+
+    let globals = liquid::object!({
+      "title": config.title,
+      "subtitle": config.subtitle,
+      "description": config.description,
+      "files": dir_template_ctx.files.clone(),
+    });
+
+    let render = liquid_template.render(&globals).map_err(|err| HttpError {
+      msg: err.to_string(),
+      status: StatusCode::INTERNAL_SERVER_ERROR,
     })?;
-    let template = template_path.clone();
-    let render =
-      html
-        .render_to_string(&dir_template_ctx)
-        .map_err(move |err| {
-          err
-            .map_err_context(|| {
-              format!("Failed to render template file {}", template.display())
-            })
-            .set_status(StatusCode::INTERNAL_SERVER_ERROR)
-        })?;
     return Ok(
       web::HttpResponse::Ok()
         .content_type("text/html")
@@ -188,6 +192,24 @@ async fn serve(
 
   if path.is_file() {
     let file = path.clone();
+    let extension = file.extension().unwrap_or_default();
+    if extension == "yaml" || extension == "yml" {
+      let content = web::block(move || fs::read_to_string(path))
+        .await
+        .map_err(|err| {
+          err
+            .map_err_context(|| {
+              format!("Failed to read file {}", file.display())
+            })
+            .set_status(StatusCode::INTERNAL_SERVER_ERROR)
+        })?;
+
+      return Ok(
+        web::HttpResponse::Ok()
+          .content_type("text/plain")
+          .body(content),
+      );
+    }
     let err_file = file.clone();
     let res =
       web::block(move || NamedFile::open(file))

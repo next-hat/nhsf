@@ -1,3 +1,9 @@
+title: Next Hat Fs
+subtitle: |
+  Official Next Hat File Server
+description: |
+  Designed to serve a diverse range of static files,
+  including basic images, videos, cloud images and even debian packages.
 host: http://0.0.0.0:8080
 path: ./conf_dir
 directory: ./dir_exposed
