@@ -132,18 +132,6 @@ where
   }
 }
 
-impl FromIo<Box<CliIoError>> for mustache::Error {
-  fn map_err_context(
-    self,
-    context: impl FnOnce() -> String,
-  ) -> Box<CliIoError> {
-    Box::new(CliIoError {
-      context: Some((context)()),
-      inner: std::io::Error::new(std::io::ErrorKind::Other, self),
-    })
-  }
-}
-
 impl FromIo<Box<CliIoError>> for std::io::ErrorKind {
   fn map_err_context(
     self,
