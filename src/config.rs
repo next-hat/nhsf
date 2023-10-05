@@ -12,9 +12,3 @@ pub struct Config {
   pub(crate) directory: String,
   pub(crate) icons: Option<HashMap<String, String>>,
 }
-
-pub struct DirectoryConfig {
-  pub(crate) title: String,
-  pub(crate) subtitle: String,
-  pub(crate) description: String,
-}

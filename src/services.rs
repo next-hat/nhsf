@@ -207,6 +207,7 @@ async fn serve(
       return Ok(
         web::HttpResponse::Ok()
           .content_type("text/plain")
+          .content_length(content.len() as u64)
           .body(content),
       );
     }
