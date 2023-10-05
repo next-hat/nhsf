@@ -192,25 +192,6 @@ async fn serve(
 
   if path.is_file() {
     let file = path.clone();
-    let extension = file.extension().unwrap_or_default();
-    if extension == "yaml" || extension == "yml" {
-      let content = web::block(move || fs::read_to_string(path))
-        .await
-        .map_err(|err| {
-          err
-            .map_err_context(|| {
-              format!("Failed to read file {}", file.display())
-            })
-            .set_status(StatusCode::INTERNAL_SERVER_ERROR)
-        })?;
-
-      return Ok(
-        web::HttpResponse::Ok()
-          .content_type("text/plain")
-          .content_length(content.len() as u64)
-          .body(content),
-      );
-    }
     let err_file = file.clone();
     let res =
       web::block(move || NamedFile::open(file))
